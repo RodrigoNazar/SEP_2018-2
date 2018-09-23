@@ -40,8 +40,6 @@
 // Returns zero in case of success, non-zero for errors.
 uint8_t USART_Init(struct USART_configuration config)
 {
-	// Add your code here. Don't forget that this function is supposed
-	// to return an error code if something goes wrong!
 }
 
 
@@ -49,8 +47,6 @@ uint8_t USART_Init(struct USART_configuration config)
 // Transmits a single character
 void USART_Transmit_char(uint8_t data)
 {
-	// Add your code here. Wait, didn't you already
-	// write this in the past?
 }
 
 
@@ -58,7 +54,20 @@ void USART_Transmit_char(uint8_t data)
 // Transmits a given string
 void USART_Transmit_String(char* string)
 {
-	// Add your code here.
- 	// Hint: Pointers are fun and might make it very
-	// easy to process a string and send it char by char.
 }
+
+
+
+// Receives a single character
+char USART_Receive_char(void)
+{
+}
+
+
+
+// Receives a '\n' terminated string and writes it into a supplied buffer.
+// The buffer must be guaranteed to handle at least bufflen bytes.
+// Returns the number of bytes written into the buffer.
+uint8_t USART_Receive_String(char* buffer, uint8_t bufflen)
+{
+} 

@@ -18,46 +18,47 @@
  *
  ****************************************************/
 
-
-// MCU Clock Speed - needed for delay.h
-#define F_CPU	16000000UL
-
-#include <avr/io.h>
-#include <util/delay.h>
+// Libraries used
+ #include "msp430.h"
 
 
 // Have a look at both the .h and the .c file, there is code missing.
-#include "USART/USART_implement_me.h"
+#include "USART_implement_me.h"
 
 
 
 /* The main function */
 int main(void)
 {
-	struct USART_configuration config_57600_8N1 = {<add parameters here>};
-	struct USART_configuration config_9600_8N2 = {<add parameters here>};
-	struct USART_configuration config_19200_7N1 = {<add parameters here>};
-	struct USART_configuration config_19200_7E2 = {<add parameters here>};
+	WDTCTL = WDTPW + WDTHOLD; // Stop WDT
+
+    // Configuraciones del USART
+	struct USART_configuration config_57600_8N1 = {57600, 0, 8, 1};
+    struct USART_configuration config_9600_8N2 = {9600, 0, 8, 2};
+    struct USART_configuration config_19200_7N1 = {19200, 0, 8, 1};
+    struct USART_configuration config_19200_7E2 = {19200, 1, 8, 2};
 
 	// Initialise the serial communication interface and print a test string
 	USART_Init(config_57600_8N1);
+	__delay_cycles(10000);
 	USART_Transmit_String("Congratulations! You are now sending test messages at 57600 8N1.\r\n");
 
 	// Initialise the serial communication interface and print a test string
 	USART_Init(config_9600_8N2);
+	__delay_cycles(10000);
 	USART_Transmit_String("Change your terminal settings and reset the MCU to see 9600 8N2.\r\n");
 
 	// Initialise the serial communication interface and print a test string
 	USART_Init(config_19200_7N1);
+	__delay_cycles(10000);
 	USART_Transmit_String("With the wrong settings, you will see nothing but gibberish at 19200 7N1.\r\n");
 
 	// Initialise the serial communication interface and print a test string
 	USART_Init(config_19200_7E2);
+	__delay_cycles(10000);
 	USART_Transmit_String("Even parity and two stop bits have limited use. But 19200 7E2 is great for annoying students.\r\n");
 
 
 	// Play dead
 	while(1);
 }
-
-
