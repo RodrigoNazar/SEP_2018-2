@@ -175,3 +175,23 @@ void USART_Transmit_String(char* string)
     string++;
     }
 }
+
+
+void Error_checking(int error)
+{
+   if (error==1)
+   {
+    UCA1CTL0 &= ~UC7BIT;  //configuraciones de baud rate 57600_8N1 "obligadas"
+    UCA1MCTL = BIT1;
+    UCA1BR0 = 18;
+    UCA1CTL0 &= ~BIT7;
+    UCA1CTL0 &= ~BIT3; 
+    __delay_cycles(10000);
+    USART_Transmit_String("Se ha ingresado una configuracion invalida.\r\n");
+    while (1);
+   }
+   else
+   {
+    ;
+   }
+}

@@ -18,14 +18,14 @@
 #ifndef _USART_IMPLEMENT_ME_H_
 #define _USART_IMPLEMENT_ME_H_
 
-#include <stdint.h> // Librería para uints
+#include <stdint.h> // LibrerÃ­a para uints
 
 
 
-// Inicialización del struct
+// InicializaciÃ³n del struct
 
-// Arrays sólo pueden almacenar elementos de la misma naturaleza
-// Las structures no tienen esa limitación
+// Arrays sÃ³lo pueden almacenar elementos de la misma naturaleza
+// Las structures no tienen esa limitaciÃ³n
 struct USART_configuration
 {
 	// <add parameters here>
@@ -48,3 +48,4 @@ void USART_Transmit_String(char* string);
 
 
 #endif // _USART_IMPLEMENT_ME_H_
+
