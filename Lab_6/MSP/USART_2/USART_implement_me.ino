@@ -67,27 +67,23 @@ uint8_t USART_Init(struct USART_configuration config)
     switch(config.baud)
     {
     case 9600:
-          UCA1BR0 = 109;            // Baud Rate 9600
-          UCA1MCTL = BIT2;          // UCBRSx=2 -> Patrón de modulación
-                                    // UCBRFx=0 -> Patrón de modulación
+          UCA1BR0 = 104;            // Baud Rate 9600
+          UCA1MCTL = BIT1;          // Modulación de la señal serial
           break;
 
     case 19200:
-          UCA1BR0 = 54;             // Baud Rate 19200
-          UCA1MCTL = BIT3 + BIT1;   // Modulation UCBRSx=5
-                                    // UCBRFx=0
+          UCA1BR0 = 52;             // Baud Rate 19200
+          UCA1MCTL = BIT1;
           break;
 
     case 57600:
           UCA1BR0 = 18;             // Baud Rate 57600
-          UCA1MCTL = BIT1;          // Modulation UCBRSx=1
-                                    // UCBRFx=0
+          UCA1MCTL = BIT1;
           break;
 
     default:
           UCA1BR0 = 18;             // Baud Rate 57600
-          UCA1MCTL = BIT1;          // Modulation UCBRSx=1
-                                    // UCBRFx=0
+          UCA1MCTL = BIT1;
           error = 1;
     }
 
@@ -108,9 +104,10 @@ uint8_t USART_Init(struct USART_configuration config)
         UCA1CTL0 &= ~BIT6;       // IMPAR
         break;
 
-    default:  UCA1CTL0 &= ~BIT7;
-              error = 1;
-          break;
+    default:
+        UCA1CTL0 &= ~BIT7;
+        error = 1;
+        break;
     }
 
     // STOP BITS
@@ -119,9 +116,12 @@ uint8_t USART_Init(struct USART_configuration config)
     {
     case 1: UCA1CTL0 &= ~BIT3;
         break;
+
     case 2: UCA1CTL0 |= BIT3;
         break;
-    default:  UCA1CTL0 &= ~BIT3;
+
+    default:
+          UCA1CTL0 &= ~BIT3;
           error = 1;
           break;
     }
@@ -130,17 +130,22 @@ uint8_t USART_Init(struct USART_configuration config)
     // Buscar en datasheet por UCAxCTL0
        switch(config.n_data)
     {
-    case 7: UCA1CTL0 |= BIT4;
+    case 7:
+        UCA1CTL0 |= BIT4;               // 7-bits
         break;
-    case 8: UCA1CTL0 &= ~BIT4;
+
+    case 8:
+        UCA1CTL0 &= ~BIT4;              // 8-bits
         break;
-    default:  UCA1CTL0 &= ~BIT4;
+
+    default:
+          UCA1CTL0 &= ~BIT4;
           error = 1;
           break;
     }
 
     UCA1CTL1 &= ~UCSWRST;  // USCI in operation mode
-    return error;
+    return error;          // Buscar por UCAxCTL1
 }
 
 
@@ -179,19 +184,17 @@ void USART_Transmit_String(char* string)
 
 void Error_checking(int error)
 {
-   if (error==1)
+   if (error == 1)
    {
-    UCA1CTL0 &= ~UC7BIT;  //configuraciones de baud rate 57600_8N1 "obligadas"
-    UCA1MCTL = BIT1;
+    UCA1CTL0 &= ~UC7BIT;            //configuraciones de baud rate 57600_8N1 por defecto
+    UCA1MCTL = BIT1;                // para enviar el mensaje de error
     UCA1BR0 = 18;
     UCA1CTL0 &= ~BIT7;
-    UCA1CTL0 &= ~BIT3; 
+    UCA1CTL0 &= ~BIT3;
     __delay_cycles(10000);
     USART_Transmit_String("Se ha ingresado una configuracion invalida.\r\n");
-    while (1);
+    while (1);                      // No sigue ejecutando el código si se tiene que error == 1
    }
    else
-   {
-    ;
-   }
+   {;}
 }

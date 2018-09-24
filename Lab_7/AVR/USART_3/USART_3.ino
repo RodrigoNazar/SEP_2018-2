@@ -22,7 +22,7 @@ int main(void)
 {
 	// Initialize the serial communication interface
 	struct USART_configuration config_57600_8N1 = {57600, 8, 0, 1};
-	USART_Init(config_57600_8N1);
+	Error_checking(USART_Init(config_57600_8N1));
 	node_t *head = linked_list_init();
 
  	while(1)

@@ -43,18 +43,47 @@ uint8_t USART_Init(struct USART_configuration config)
 {
  	// Add your code here. Don't forget that this function is supposed
  	// to return an error code if something goes wrong!
- 	/*Set baud rate */
- 	uint16_t ubrr = FOSC/config.baud/16 - 1;
 
- 	UBRR0H = (unsigned char)(ubrr>>8);    // USART Baud Rate Register High
- 	UBRR0L = (unsigned char)ubrr;         // USART Baud Rate Register Low
-
-
+    int error = 0;
 
  	//Enable receiver and transmitter */
  	UCSR0B = (1<<RXEN0) | (1<<TXEN0) ;    // Reciver enable 0 y Transmitter enable 0 (USART0 --> REGISTER DESCRIPTION --> USART Control and Status Register n B)
                                           // RXENn: Escribiendo este bit en 1, enciende el USART Reciever
                                           // TXENn: Escribiendo este bit en 1, enciende el USART Transmitter.
+    uint16_t ubrr;
+    // Baud rate
+    switch (config.baud)
+    {
+    case 9600:
+        ubrr = FOSC/config.baud/16 - 1;      // Página 173
+
+        UBRR0H = (unsigned char)(ubrr>>8);    // USART Baud Rate Register High
+        UBRR0L = (unsigned char)ubrr;         // USART Baud Rate Register Low
+        break;
+
+    case 19200:
+        ubrr = FOSC/config.baud/16 - 1;      // Página 173
+
+        UBRR0H = (unsigned char)(ubrr>>8);    // USART Baud Rate Register High
+        UBRR0L = (unsigned char)ubrr;         // USART Baud Rate Register Low
+        break;
+
+    case 57600:
+        ubrr = FOSC/config.baud/16 - 1;      // Página 173
+
+        UBRR0H = (unsigned char)(ubrr>>8);    // USART Baud Rate Register High
+        UBRR0L = (unsigned char)ubrr;         // USART Baud Rate Register Low
+        break;
+
+    default:                           // Configuración por defecto para enviar el error en 57600
+        ubrr = FOSC/57600/16 - 1;      // Página 173
+
+        UBRR0H = (unsigned char)(ubrr>>8);    // USART Baud Rate Register High
+        UBRR0L = (unsigned char)ubrr;         // USART Baud Rate Register Low
+          error = 1;
+}
+
+
 
     // Número de bits
  	switch (config.n_data)
@@ -79,6 +108,7 @@ uint8_t USART_Init(struct USART_configuration config)
 
  		default:
             UCSR0C |= (3<<UCSZ00);  // 8 bits por defecto
+            error = 1;
  	}
 
     // Numero de bits de término
@@ -94,6 +124,7 @@ uint8_t USART_Init(struct USART_configuration config)
 
  		default:
             UCSR0C &= ~(1<<USBS0); // 1 bit por defecto
+            error = 1;
  	}
 
     // Paridad
@@ -114,9 +145,10 @@ uint8_t USART_Init(struct USART_configuration config)
 
  		default:
             UCSR0C &= ~(1<<UPM01) & ~(1<<UPM00);
+            error = 1;
 	}
 
- 	return 0;
+ 	return error;
 }
 
 
@@ -178,7 +210,7 @@ uint8_t USART_Receive_String(node_t *p_head)   // Recibe una lista ligada inicia
  	while (c != '\n')                           // Mientras el caracter ingresado no sea la tecla ENTER
  	{
  		append(p_head, c);                      // Se agrega a la lista ligada el nodo de proveniente de la
-                                                // dicrección p_head y el valor del caracter c
+                                            // dicrección p_head y el valor del caracter c
  		c = USART_Receive_char();               // Toma nuevamente el valor del caracter enviado por consola
  	}
  	return 0;
@@ -254,4 +286,15 @@ void clear_list(node_t *p_head)                      // Recibo el nodo de proven
  		current = current->next;
  	}
  	clear_list(p_head);
+ }
+
+ void Error_checking(int error)
+ {
+    if (error == 1)
+    {
+     USART_Transmit_String("Se ha ingresado una configuracion invalida.\r\n");
+     while (1);                      // No sigue ejecutando el código si se tiene que error == 1
+    }
+    else
+    {;}
  }

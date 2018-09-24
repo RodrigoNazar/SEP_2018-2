@@ -48,4 +48,3 @@ void USART_Transmit_String(char* string);
 
 
 #endif // _USART_IMPLEMENT_ME_H_
-
