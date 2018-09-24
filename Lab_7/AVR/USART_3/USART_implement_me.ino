@@ -98,8 +98,8 @@ uint8_t USART_Init(struct USART_configuration config)
  		    break;
 
  		case 7:
-            UCSR0C &= ~(1<<UCSZ02);
- 		    UCSR0C |=  (1<<UCSZ01) | (1<<UCSZ00);
+            UCSR0C &= ~(1<<UCSZ02) & ~ (1<<UCSZ00);
+ 		    UCSR0C |=  (1<<UCSZ01);
  		    break;
 
  		case 8:
