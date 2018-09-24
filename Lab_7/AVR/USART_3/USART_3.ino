@@ -15,53 +15,36 @@
  *
  ****************************************************/
 
-
-// MCU Clock Speed - needed for delay.h
-#define F_CPU	16000000UL
-#define BUFFLEN 30
-
-
 #include <avr/io.h>
-#include <util/delay.h>
+#include "USART_implement_me.h"
 
-
-// Have a look at both the .h and the .c file, there is code missing.
-#include "USART/USART_implement_me.h"
-
-
-
-/* The main function */
 int main(void)
 {
-	
-	
-	// Initialise the serial communication interface
+	// Initialize the serial communication interface
 	struct USART_configuration config_57600_8N1 = {57600, 8, 0, 1};
 	USART_Init(config_57600_8N1);
+	node_t *head = linked_list_init();
 
-	
-	while(1)
-	{
+ 	while(1)
+ 	{
+		USART_Transmit_String("\r\n\r\n");
 		// Print a welcome message
 		USART_Transmit_String("Welcome to the first test. Please send a single character from your terminal.\r\n");
-		
+
 		// Show the received character
-		char c = USART_Receive_char();
-		USART_Transmit_String("I received an ");
-		USART_Transmit_char(c);
-		USART_Transmit_String(".\r\n\r\n");
-		
-		
-		// Print a welcome message
-		USART_Transmit_String("Welcome to the Second test. Please send a properly terminated string.\r\n");
-		
-		// Show the received string
-		char string[BUFFLEN];
-		USART_Receive_String(string, BUFFLEN);
-		USART_Transmit_String("I received this line: ");
-		USART_Transmit_String(string);
-		USART_Transmit_String(".\r\n\r\n");
-	}
-}
+ 		char c = USART_Receive_char();
+ 		USART_Transmit_String("I received an ");
+ 		USART_Transmit_char(c);
+ 		USART_Transmit_String(".\r\n\r\n");
 
 
+ 		// Print a welcome message
+ 		USART_Transmit_String("Welcome to the Second test. Please send a properly terminated string.\r\n\r\n");
+
+ 		USART_Receive_String(head);
+ 		USART_Transmit_String("I received this line:");
+ 		// Show the received string
+ 		print_list(head);
+ 		USART_Transmit_String("\r\n\r\n");
+ 	}
+ }
