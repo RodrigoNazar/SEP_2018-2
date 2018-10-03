@@ -21,8 +21,8 @@
 int main(void)
 {
 	// Initialize the serial communication interface
-	struct USART_configuration config_57600_8N1 = {57600, 7, 0, 1};
-	Error_checking(USART_Init(config_57600_8N1));
+	struct USART_configuration config_9600_8N1 = {9600, 8, 0, 1};
+	Error_checking(USART_Init(config_9600_8N1));
 	node_t *head = linked_list_init();
 
  	while(1)

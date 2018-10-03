@@ -54,33 +54,33 @@ uint8_t USART_Init(struct USART_configuration config)
     // Baud rate
     switch (config.baud)
     {
-    case 9600:
-        ubrr = FOSC/config.baud/16 - 1;      // Página 173
+        case 9600:
+            ubrr = FOSC/config.baud/16 - 1;      // Página 173
 
-        UBRR0H = (unsigned char)(ubrr>>8);    // USART Baud Rate Register High
-        UBRR0L = (unsigned char)ubrr;         // USART Baud Rate Register Low
-        break;
+            UBRR0H = (unsigned char)(ubrr>>8);    // USART Baud Rate Register High
+            UBRR0L = (unsigned char)ubrr;         // USART Baud Rate Register Low
+            break;
 
-    case 19200:
-        ubrr = FOSC/config.baud/16 - 1;      // Página 173
+        case 19200:
+            ubrr = FOSC/config.baud/16 - 1;      // Página 173
 
-        UBRR0H = (unsigned char)(ubrr>>8);    // USART Baud Rate Register High
-        UBRR0L = (unsigned char)ubrr;         // USART Baud Rate Register Low
-        break;
+            UBRR0H = (unsigned char)(ubrr>>8);    // USART Baud Rate Register High
+            UBRR0L = (unsigned char)ubrr;         // USART Baud Rate Register Low
+            break;
 
-    case 57600:
-        ubrr = FOSC/config.baud/16 - 1;      // Página 173
+        case 57600:
+            ubrr = FOSC/config.baud/16 - 1;      // Página 173
 
-        UBRR0H = (unsigned char)(ubrr>>8);    // USART Baud Rate Register High
-        UBRR0L = (unsigned char)ubrr;         // USART Baud Rate Register Low
-        break;
+            UBRR0H = (unsigned char)(ubrr>>8);    // USART Baud Rate Register High
+            UBRR0L = (unsigned char)ubrr;         // USART Baud Rate Register Low
+            break;
 
-    default:                           // Configuración por defecto para enviar el error en 57600
-        ubrr = FOSC/57600/16 - 1;      // Página 173
+        default:                           // Configuración por defecto para enviar el error en 57600
+            ubrr = FOSC/57600/16 - 1;      // Página 173
 
-        UBRR0H = (unsigned char)(ubrr>>8);    // USART Baud Rate Register High
-        UBRR0L = (unsigned char)ubrr;         // USART Baud Rate Register Low
-          error = 1;
+            UBRR0H = (unsigned char)(ubrr>>8);    // USART Baud Rate Register High
+            UBRR0L = (unsigned char)ubrr;         // USART Baud Rate Register Low
+              error = 1;
 }
 
 
@@ -280,13 +280,23 @@ void clear_list(node_t *p_head)                      // Recibo el nodo de proven
  void print_list(node_t * p_head)                     // Recibo el nodo de proveniente de la
  {                                                    // dicrección p_head y el valor del caracter
  	node_t * current = p_head;                        // Tomamos el nodo
+  // node_t * libre;
  	while (current != NULL)
  	{
  		USART_Transmit_char(current->val);
+    // libre = current;
  		current = current->next;
+    // free(libre);
  	}
  	clear_list(p_head);
+  // push(&p_head, ' ');
  }
+
+
+
+
+
+
 
  void Error_checking(int error)
  {
