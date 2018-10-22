@@ -29,8 +29,9 @@ int main(void)
  	{
 		USART_Transmit_String("\r\n\r\n");
 		// Print a welcome message
+    int a = 3;
 		USART_Transmit_String("Welcome to the first test. Please send a single character from your terminal.\r\n");
-
+    USART_Transmit_char("%d");
 		// Show the received character
  		char c = USART_Receive_char();
  		USART_Transmit_String("I received an ");
